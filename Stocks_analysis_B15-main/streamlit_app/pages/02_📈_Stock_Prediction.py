@@ -36,6 +36,15 @@ plotly_style = get_plotly_template()
 # Historical data candlestick chart
 stock_data = fetch_stock_history(stock_ticker, period, interval)
 st.markdown("## **Historical Data**")
+
+if stock_data is None or stock_data.empty or not {"Open", "High", "Low", "Close"}.issubset(stock_data.columns):
+    st.warning(
+        f"Could not load historical data for {stock_ticker}. "
+        "Yahoo Finance is rate-limiting the request — try a different stock, "
+        "switch the period/interval, or refresh in a minute."
+    )
+    st.stop()
+
 fig = go.Figure(
     data=[
         go.Candlestick(

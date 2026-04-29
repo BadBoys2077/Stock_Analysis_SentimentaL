@@ -4,7 +4,8 @@ numpy
 matplotlib
 plotly
 requests
-yfinance
+yfinance>=0.2.40
+curl_cffi
 alpha_vantage
 statsmodels
 nltk

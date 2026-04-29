@@ -11,6 +11,13 @@ import pandas as pd
 import yfinance as yf
 from alpha_vantage.timeseries import TimeSeries
 import requests
+import streamlit as st
+
+try:
+    from curl_cffi import requests as curl_requests
+    _YF_SESSION = curl_requests.Session(impersonate="chrome")
+except ImportError:
+    _YF_SESSION = None
 
 from statsmodels.tsa.ar_model import AutoReg
 
@@ -67,6 +74,7 @@ def safe_get(data_dict, key):
     return data_dict.get(key, "N/A")
 
 # Fetch stock info from Alpha Vantage
+@st.cache_data(ttl=900, show_spinner=False)
 def fetch_stock_history(
     stock_ticker,
     period=None,
@@ -74,37 +82,40 @@ def fetch_stock_history(
     api_key=ALPHA_VANTAGE_API_KEY,
 ):
     """
-    Fetch stock price history using yfinance when period/interval are provided,
-    otherwise fall back to Alpha Vantage daily data.
+    Fetch stock price history. Tries yfinance first; on failure (e.g. Yahoo
+    rate-limiting), falls back to Alpha Vantage daily data.
 
     Returns:
-        pd.DataFrame: DataFrame with columns Open, High, Low, Close.
+        pd.DataFrame: DataFrame with columns Open, High, Low, Close. Empty on failure.
     """
+    yf_error = None
+    if period and interval:
+        try:
+            ticker = yf.Ticker(stock_ticker, session=_YF_SESSION) if _YF_SESSION else yf.Ticker(stock_ticker)
+            data = ticker.history(period=period, interval=interval)
+            if not data.empty and {"Open", "High", "Low", "Close"}.issubset(data.columns):
+                return data[["Open", "High", "Low", "Close"]]
+        except Exception as e:
+            yf_error = e
+
     try:
-        if period and interval:
-            stock_data = yf.Ticker(stock_ticker)
-            data = stock_data.history(period=period, interval=interval)
-            return data[["Open", "High", "Low", "Close"]]
-
         ts = TimeSeries(key=api_key, output_format='pandas')
-        data, meta_data = ts.get_daily(symbol=stock_ticker, outputsize='compact')
-
-        # Rename columns to standard format
+        data, _ = ts.get_daily(symbol=stock_ticker, outputsize='compact')
         data = data.rename(columns={
             '1. open': 'Open',
             '2. high': 'High',
             '3. low': 'Low',
-            '4. close': 'Close'
+            '4. close': 'Close',
         })
-
         return data[["Open", "High", "Low", "Close"]]
-    except Exception as e:
-        print("Error fetching stock history:", e)
+    except Exception as av_error:
+        print(f"yfinance error: {yf_error}; alpha_vantage error: {av_error}")
         return pd.DataFrame()
 
+@st.cache_data(ttl=900, show_spinner=False)
 def fetch_stock_info(stock_ticker, api_key=ALPHA_VANTAGE_API_KEY):
     try:
-        stock_data = yf.Ticker(stock_ticker)
+        stock_data = yf.Ticker(stock_ticker, session=_YF_SESSION) if _YF_SESSION else yf.Ticker(stock_ticker)
         info = stock_data.info
 
         if not info or not info.get("symbol"):
@@ -151,7 +162,7 @@ def generate_stock_prediction(stock_ticker):
             )
 
         # Fetch stock data
-        stock_data = yf.Ticker(stock_ticker)
+        stock_data = yf.Ticker(stock_ticker, session=_YF_SESSION) if _YF_SESSION else yf.Ticker(stock_ticker)
         stock_data_hist = stock_data.history(period="2y", interval="1d")
         stock_data_close = stock_data_hist[["Close"]]
 
