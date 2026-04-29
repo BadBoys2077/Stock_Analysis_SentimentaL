@@ -1,17 +1,391 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ========== CSS Custom Properties ========== */
+:root {
+    --bg-primary: #0f1117;
+    --bg-secondary: #161b22;
+    --bg-tertiary: #1c2333;
+    --border-subtle: rgba(56, 68, 91, 0.4);
+    --border-glow: rgba(86, 198, 204, 0.15);
+    --text-primary: #e6edf3;
+    --text-secondary: #8b949e;
+    --text-muted: #6e7681;
+    --accent-teal: #56c6cc;
+    --accent-coral: #f07178;
+    --accent-amber: #ffcb6b;
+    --accent-blue: #82aaff;
+    --accent-green: #c3e88d;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+}
+
+/* ========== Global Reset & Font ========== */
+html, body, [class*="css"] {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* ========== App Background ========== */
 .stApp > header {
     background-color: transparent;
-  }
-  
-  .stApp {
-    background: rgb(0,0,0);
-    background: linear-gradient(-20deg, rgba(0,0,0,1) 13%, rgba(21,67,108,1) 38%, rgba(0,94,81,1) 69%, rgba(0,0,0,1) 100%);
-    animation: my_animation 20s ease infinite;
-    background-size: 200% 200%;
+}
+
+.stApp {
+    background: linear-gradient(135deg, #0f1117 0%, #0d2137 40%, #0a2a2a 70%, #0f1117 100%);
+    background-size: 300% 300%;
     background-attachment: fixed;
-  }
-  
-  @keyframes my_animation {
-    0% {background-position: 0% 0%;}
-    50% {background-position: 100% 100%;}
-    100% {background-position: 0% 0%;}
-  }
+    animation: subtleShift 30s ease infinite;
+}
+
+@keyframes subtleShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ========== Sidebar ========== */
+section[data-testid="stSidebar"] {
+    background-color: rgba(22, 27, 34, 0.95);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid var(--border-subtle);
+}
+
+section[data-testid="stSidebar"] .stMarkdown h2 {
+    color: var(--accent-teal);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-sm);
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+section[data-testid="stSidebar"] .stMarkdown h3 {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: var(--space-md);
+    margin-bottom: var(--space-xs);
+}
+
+section[data-testid="stSidebar"] .stSelectbox label,
+section[data-testid="stSidebar"] .stRadio label,
+section[data-testid="stSidebar"] .stTextInput label {
+    color: var(--text-secondary) !important;
+    font-size: 0.85rem;
+}
+
+/* ========== Main Content Typography ========== */
+.stMarkdown h1 {
+    color: var(--text-primary) !important;
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-sm) !important;
+}
+
+.stMarkdown h2 {
+    color: var(--text-primary) !important;
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    margin-top: var(--space-xl) !important;
+    margin-bottom: var(--space-md) !important;
+}
+
+.stMarkdown h3 {
+    color: var(--text-primary) !important;
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+}
+
+.stMarkdown h5 {
+    color: var(--text-secondary) !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    line-height: 1.6;
+}
+
+.stMarkdown p, .stMarkdown li {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* ========== Glassmorphism Card ========== */
+.glass-card {
+    background: rgba(22, 27, 34, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glow);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-md);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+    border-color: rgba(86, 198, 204, 0.3);
+    box-shadow: 0 4px 24px rgba(86, 198, 204, 0.08);
+}
+
+.glass-card h3 {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+    margin-top: 0;
+}
+
+.glass-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: var(--space-xs);
+}
+
+.glass-card .card-icon {
+    font-size: 2rem;
+    margin-bottom: var(--space-sm);
+    display: block;
+}
+
+/* ========== Metric Cards ========== */
+div[data-testid="stMetric"] {
+    background: rgba(22, 27, 34, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glow);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-lg);
+    text-align: center;
+}
+
+div[data-testid="stMetric"] label {
+    color: var(--text-muted) !important;
+    font-size: 0.8rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
+    color: var(--accent-teal) !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+}
+
+/* ========== DataFrame / Tables ========== */
+div[data-testid="stDataFrame"] {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+/* ========== Expanders ========== */
+div[data-testid="stExpander"] {
+    background: rgba(22, 27, 34, 0.5);
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-md) !important;
+    margin-bottom: var(--space-sm);
+    transition: border-color 0.3s ease;
+}
+
+div[data-testid="stExpander"]:hover {
+    border-color: rgba(86, 198, 204, 0.3) !important;
+}
+
+div[data-testid="stExpander"] summary {
+    color: var(--text-primary) !important;
+    font-weight: 500;
+}
+
+/* ========== Page Header ========== */
+.page-header {
+    padding: var(--space-xl) 0 var(--space-lg) 0;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: var(--space-xl);
+}
+
+.page-header h1 {
+    color: var(--text-primary);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.page-header .subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-top: var(--space-xs);
+    font-weight: 400;
+}
+
+/* ========== News Cards ========== */
+.news-card {
+    background: rgba(22, 27, 34, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-lg);
+    margin-bottom: var(--space-sm);
+    transition: all 0.3s ease;
+    border-left: 3px solid var(--accent-teal);
+}
+
+.news-card:hover {
+    border-color: rgba(86, 198, 204, 0.3);
+    box-shadow: 0 2px 16px rgba(86, 198, 204, 0.06);
+    transform: translateY(-1px);
+}
+
+.news-card.sentiment-positive { border-left-color: var(--accent-green); }
+.news-card.sentiment-negative { border-left-color: var(--accent-coral); }
+.news-card.sentiment-neutral  { border-left-color: var(--accent-amber); }
+
+.news-card .news-title {
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+}
+
+.news-card .news-meta {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-bottom: var(--space-sm);
+}
+
+.news-card .news-summary {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.sentiment-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sentiment-badge.positive {
+    background: rgba(195, 232, 141, 0.15);
+    color: var(--accent-green);
+}
+
+.sentiment-badge.negative {
+    background: rgba(240, 113, 120, 0.15);
+    color: var(--accent-coral);
+}
+
+.sentiment-badge.neutral {
+    background: rgba(255, 203, 107, 0.15);
+    color: var(--accent-amber);
+}
+
+/* ========== Sidebar Brand ========== */
+.sidebar-brand {
+    text-align: center;
+    padding: var(--space-lg) var(--space-md);
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: var(--space-md);
+}
+
+.sidebar-brand h2 {
+    color: var(--accent-teal) !important;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.01em;
+    border: none !important;
+    padding: 0 !important;
+    text-transform: none !important;
+}
+
+.sidebar-brand p {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin: 4px 0 0 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* ========== Footer ========== */
+.app-footer {
+    margin-top: var(--space-2xl);
+    padding: var(--space-lg) 0;
+    border-top: 1px solid var(--border-subtle);
+    text-align: center;
+}
+
+.app-footer p {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin: 2px 0;
+}
+
+.app-footer .credits {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+/* ========== Links ========== */
+a {
+    color: var(--accent-teal) !important;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--accent-blue) !important;
+    text-decoration: underline;
+}
+
+/* ========== Buttons ========== */
+.stButton > button {
+    background: rgba(86, 198, 204, 0.1);
+    border: 1px solid var(--accent-teal);
+    color: var(--accent-teal);
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.stButton > button:hover {
+    background: rgba(86, 198, 204, 0.2);
+    box-shadow: 0 0 12px rgba(86, 198, 204, 0.15);
+}
+
+/* ========== Tabs ========== */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 0;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.stTabs [data-baseweb="tab"] {
+    color: var(--text-secondary);
+    font-weight: 500;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.stTabs [aria-selected="true"] {
+    color: var(--accent-teal) !important;
+    border-bottom: 2px solid var(--accent-teal);
+}
+
+/* ========== Alerts ========== */
+div[data-testid="stAlert"] {
+    border-radius: var(--radius-md);
+}

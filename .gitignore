@@ -1,0 +1,22 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local tool state
+.playwright-mcp/
+
+# Streamlit local configuration and secrets
+.streamlit/
+secrets.toml
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
