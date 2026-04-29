@@ -3,7 +3,14 @@ pandas
 numpy
 matplotlib
 plotly
+requests
+yfinance
+alpha_vantage
+statsmodels
+nltk
+beautifulsoup4
+lxml
+tensorflow-cpu
 
 textblob
 scikit-learn
-sklearn
